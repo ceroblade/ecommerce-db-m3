@@ -1,5 +1,7 @@
 # Proyecto de Base de Datos E-Commerce (M3)
 
+https://github.com/ceroblade/ecommerce-db-m3/
+
 Este proyecto implementa el modelo de base de datos para una plataforma de e-commerce simplificada. Incluye el diseño del esquema, datos de prueba y consultas analíticas clave.
 
 ## Estructura del Proyecto
@@ -24,8 +26,6 @@ El modelo incluye las siguientes entidades principales:
 *   **Ordenes y Detalles_Orden**: Registro de transacciones de venta y su detalle.
 *   **Pagos**: Registro de pagos asociados a las órdenes.
 *   **Movimientos_Inventario**: (Opcional) Historial de movimientos de stock.
-
-Puedes ver el diagrama completo en `docs/er.png` (Nota: El diagrama puede mantener nombres en inglés si no ha sido regenerado).
 
 ## Instrucciones de Uso
 
