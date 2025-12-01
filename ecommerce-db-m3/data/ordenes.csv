@@ -1,0 +1,5 @@
+cliente_id,fecha_orden,estado,monto_total
+1,"2023-10-01 10:00:00","COMPLETADO",760
+2,"2023-10-05 15:30:00","ENVIADO",105
+1,"2023-11-10 09:00:00","COMPLETADO",50
+3,"2023-11-15 18:45:00","PENDIENTE",20

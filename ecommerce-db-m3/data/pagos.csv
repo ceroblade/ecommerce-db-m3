@@ -1,0 +1,4 @@
+orden_id,fecha_pago,monto,metodo_pago
+1,"2023-10-01 10:05:00",760,"TARJETA_CREDITO"
+2,"2023-10-05 15:35:00",105,"PAYPAL"
+3,"2023-11-10 09:05:00",50,"TARJETA_DEBITO"

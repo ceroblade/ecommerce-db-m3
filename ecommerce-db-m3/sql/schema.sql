@@ -1,85 +1,84 @@
 -- ==========================================
--- E-Commerce Database Schema (PostgreSQL)
+-- Esquema de Base de Datos E-Commerce (PostgreSQL)
 -- ==========================================
 
--- 1. Tabla Customers (Clientes)
-CREATE TABLE customers (
+-- 1. Tabla Clientes
+CREATE TABLE clientes (
     id SERIAL PRIMARY KEY,
-    first_name VARCHAR(100) NOT NULL,
-    last_name VARCHAR(100) NOT NULL,
-    email VARCHAR(150) NOT NULL UNIQUE,
-    address TEXT,
-    phone VARCHAR(20),
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    nombre VARCHAR(100) NOT NULL,
+    apellido VARCHAR(100) NOT NULL,
+    correo VARCHAR(150) NOT NULL UNIQUE,
+    direccion TEXT,
+    telefono VARCHAR(20),
+    fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- 2. Tabla Categories (Categorías)
-CREATE TABLE categories (
+-- 2. Tabla Categorias
+CREATE TABLE categorias (
     id SERIAL PRIMARY KEY,
-    name VARCHAR(100) NOT NULL UNIQUE,
-    description TEXT
+    nombre VARCHAR(100) NOT NULL UNIQUE,
+    descripcion TEXT
 );
 
--- 3. Tabla Products (Productos)
-CREATE TABLE products (
+-- 3. Tabla Productos
+CREATE TABLE productos (
     id SERIAL PRIMARY KEY,
-    category_id INTEGER NOT NULL,
-    name VARCHAR(150) NOT NULL,
-    description TEXT,
-    price DECIMAL(10, 2) NOT NULL CHECK (price >= 0),
-    stock_quantity INTEGER NOT NULL DEFAULT 0 CHECK (stock_quantity >= 0),
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (category_id) REFERENCES categories(id)
+    categoria_id INTEGER NOT NULL,
+    nombre VARCHAR(150) NOT NULL,
+    descripcion TEXT,
+    precio DECIMAL(10, 0) NOT NULL CHECK (precio >= 0), -- Sin decimales
+    cantidad_stock INTEGER NOT NULL DEFAULT 0 CHECK (cantidad_stock >= 0),
+    fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (categoria_id) REFERENCES categorias(id)
 );
 
--- Índices para búsquedas frecuentes
-CREATE INDEX idx_products_name ON products(name);
-CREATE INDEX idx_products_category ON products(category_id);
+-- Indices para búsquedas frecuentes
+CREATE INDEX idx_productos_nombre ON productos(nombre);
+CREATE INDEX idx_productos_categoria ON productos(categoria_id);
 
--- 4. Tabla Orders (Órdenes/Pedidos)
-CREATE TABLE orders (
+-- 4. Tabla Ordenes (Pedidos)
+CREATE TABLE ordenes (
     id SERIAL PRIMARY KEY,
-    customer_id INTEGER NOT NULL,
-    order_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    status VARCHAR(20) DEFAULT 'PENDING' CHECK (status IN ('PENDING', 'COMPLETED', 'CANCELLED', 'SHIPPED')),
-    total_amount DECIMAL(10, 2) DEFAULT 0 CHECK (total_amount >= 0),
-    FOREIGN KEY (customer_id) REFERENCES customers(id)
+    cliente_id INTEGER NOT NULL,
+    fecha_orden TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    estado VARCHAR(20) DEFAULT 'PENDIENTE' CHECK (estado IN ('PENDIENTE', 'COMPLETADO', 'CANCELADO', 'ENVIADO')),
+    monto_total DECIMAL(10, 0) DEFAULT 0 CHECK (monto_total >= 0), -- Sin decimales
+    FOREIGN KEY (cliente_id) REFERENCES clientes(id)
 );
 
 -- Índice para buscar órdenes por cliente
-CREATE INDEX idx_orders_customer ON orders(customer_id);
+CREATE INDEX idx_ordenes_cliente ON ordenes(cliente_id);
 
--- 5. Tabla Order_Items (Detalle de la Orden)
-CREATE TABLE order_items (
+-- 5. Tabla Detalles_Orden (Items de la Orden)
+CREATE TABLE detalles_orden (
     id SERIAL PRIMARY KEY,
-    order_id INTEGER NOT NULL,
-    product_id INTEGER NOT NULL,
-    quantity INTEGER NOT NULL CHECK (quantity > 0),
-    unit_price DECIMAL(10, 2) NOT NULL CHECK (unit_price >= 0),
-    subtotal DECIMAL(10, 2) GENERATED ALWAYS AS (quantity * unit_price) STORED, -- Columna calculada (PostgreSQL 12+)
-    FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE,
-    FOREIGN KEY (product_id) REFERENCES products(id)
+    orden_id INTEGER NOT NULL,
+    producto_id INTEGER NOT NULL,
+    cantidad INTEGER NOT NULL CHECK (cantidad > 0),
+    precio_unitario DECIMAL(10, 0) NOT NULL CHECK (precio_unitario >= 0), -- Sin decimales
+    subtotal DECIMAL(10, 0) GENERATED ALWAYS AS (cantidad * precio_unitario) STORED, -- Columna calculada
+    FOREIGN KEY (orden_id) REFERENCES ordenes(id) ON DELETE CASCADE,
+    FOREIGN KEY (producto_id) REFERENCES productos(id)
 );
 
--- 6. Tabla Payments (Pagos)
-CREATE TABLE payments (
+-- 6. Tabla Pagos
+CREATE TABLE pagos (
     id SERIAL PRIMARY KEY,
-    order_id INTEGER NOT NULL UNIQUE, -- Una orden tiene un pago principal (simplificación)
-    payment_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    amount DECIMAL(10, 2) NOT NULL CHECK (amount > 0),
-    payment_method VARCHAR(50) NOT NULL, -- 'CREDIT_CARD', 'PAYPAL', etc.
-    status VARCHAR(20) DEFAULT 'COMPLETED',
-    FOREIGN KEY (order_id) REFERENCES orders(id)
+    orden_id INTEGER NOT NULL UNIQUE, -- Una orden tiene un pago principal
+    fecha_pago TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    monto DECIMAL(10, 0) NOT NULL CHECK (monto > 0), -- Sin decimales
+    metodo_pago VARCHAR(50) NOT NULL, -- 'TARJETA_CREDITO', 'PAYPAL', etc.
+    estado VARCHAR(20) DEFAULT 'COMPLETADO',
+    FOREIGN KEY (orden_id) REFERENCES ordenes(id)
 );
 
--- 7. Tabla Inventory (Movimientos de Inventario - Histórico)
--- Opcional pero recomendada para trazar cambios de stock
-CREATE TABLE inventory_movements (
+-- 7. Tabla Movimientos_Inventario (Histórico)
+CREATE TABLE movimientos_inventario (
     id SERIAL PRIMARY KEY,
-    product_id INTEGER NOT NULL,
-    movement_type VARCHAR(20) NOT NULL CHECK (movement_type IN ('IN', 'OUT', 'ADJUSTMENT')),
-    quantity INTEGER NOT NULL CHECK (quantity > 0),
-    movement_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    description TEXT,
-    FOREIGN KEY (product_id) REFERENCES products(id)
+    producto_id INTEGER NOT NULL,
+    tipo_movimiento VARCHAR(20) NOT NULL CHECK (tipo_movimiento IN ('ENTRADA', 'SALIDA', 'AJUSTE')),
+    cantidad INTEGER NOT NULL CHECK (cantidad > 0),
+    fecha_movimiento TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    descripcion TEXT,
+    FOREIGN KEY (producto_id) REFERENCES productos(id)
 );

@@ -1,0 +1,12 @@
+categoria_id,nombre,precio,cantidad_stock
+1,"Smartphone X",700,50
+1,"Laptop Pro",1300,30
+1,"Auriculares Bluetooth",60,100
+2,"Camiseta Básica",15,200
+2,"Jeans Clásicos",45,150
+2,"Zapatillas Deportivas",90,80
+3,"Lámpara de Escritorio",26,60
+3,"Juego de Sábanas",35,40
+4,"El Señor de los Anillos",20,10
+4,"Aprende SQL en 10 días",30,5
+1,"Tablet Antigua",150,10

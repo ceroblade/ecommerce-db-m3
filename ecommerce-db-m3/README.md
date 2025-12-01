@@ -1,4 +1,4 @@
-# E-Commerce Database Project (M3)
+# Proyecto de Base de Datos E-Commerce (M3)
 
 Este proyecto implementa el modelo de base de datos para una plataforma de e-commerce simplificada. Incluye el diseño del esquema, datos de prueba y consultas analíticas clave.
 
@@ -12,19 +12,20 @@ ecommerce-db-m3/
 │   ├── schema.sql      # Script DDL para crear tablas y restricciones
 │   ├── seed.sql        # Script para poblar la BD con datos de prueba
 │   └── queries.sql     # Consultas de negocio y transacciones ejemplo
+├── data/               # Archivos CSV con datos de prueba
 └── README.md           # Documentación del proyecto
 ```
 
 ## Modelo de Datos
 
 El modelo incluye las siguientes entidades principales:
-*   **Customers**: Información de los usuarios registrados.
-*   **Products & Categories**: Catálogo de productos organizado jerárquicamente.
-*   **Orders & Order_Items**: Registro de transacciones de venta y su detalle.
-*   **Payments**: Registro de pagos asociados a las órdenes.
-*   **Inventory**: (Opcional) Historial de movimientos de stock.
+*   **Clientes**: Información de los usuarios registrados.
+*   **Productos y Categorias**: Catálogo de productos organizado jerárquicamente.
+*   **Ordenes y Detalles_Orden**: Registro de transacciones de venta y su detalle.
+*   **Pagos**: Registro de pagos asociados a las órdenes.
+*   **Movimientos_Inventario**: (Opcional) Historial de movimientos de stock.
 
-Puedes ver el diagrama completo en `docs/er.png`.
+Puedes ver el diagrama completo en `docs/er.png` (Nota: El diagrama puede mantener nombres en inglés si no ha sido regenerado).
 
 ## Instrucciones de Uso
 
